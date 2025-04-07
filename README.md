@@ -1,466 +1,224 @@
-Below is a comprehensive, well-structured study note for **Unit 3: Semantic and Discourse Analysis** in Natural Language Processing (NLP), tailored for your exam tomorrow. The notes are organized chapter-wise with subchapters, key terms, examples, placeholders for diagrams (since I can’t draw them here, I’ll describe them), case study questions, and conclusions. This is designed to be massive yet easy to understand, ensuring you have all the critical information at your fingertips. Let’s dive in!
+Below is a comprehensive, easy-to-understand study note for Unit 4 of Natural Language Processing (NLP), focusing on Recurrent Neural Networks (RNN) and Transformer-based models. This note is organized chapter-wise with subchapters, key terms, examples, diagram descriptions (since I can’t draw them), case study questions, and conclusions. It’s designed to be detailed yet digestible for your exam tomorrow—good luck!
 
 ---
 
-# Unit 3: Semantic and Discourse Analysis
+# Unit 4: Recurrent Neural Networks (RNN) and Transformer-Based Models
 
-This unit explores how meaning is represented and analyzed in NLP, from individual words to entire texts. It covers semantic concepts like word meanings and their relationships, as well as discourse-level analysis, including text structure and reference tracking. These concepts are vital for building NLP systems that understand and generate human-like language.
-
----
-
-## Chapter 1: Representing Meaning
+## Chapter 1: Recurrent Neural Networks (RNN)
 
 ### Overview
-Representing meaning is about capturing the semantics of words, sentences, or texts in a way machines can process.
-
-### Subchapter 1.1: Key Concepts
-- **Definition**: Converting linguistic meaning into a structured, machine-readable format.
-- **Key Terms**:
-  - **Lexical Semantics**: Meaning of individual words and their relationships.
-  - **Compositional Semantics**: Sentence meaning derived from word meanings and syntax.
-  - **Word Representations**: Techniques to encode words (e.g., one-hot encoding, embeddings).
-  - **Semantic Roles & Frames**: Assigning roles like agent, action, object (e.g., "John [agent] kicked [action] the ball [object]").
-  - **Logical Form**: Representing meaning with formal logic (e.g., predicate logic).
-  - **Knowledge Graphs**: Graph structures linking entities and relationships (e.g., "John" → "owns" → "car").
-  - **Distributional Semantics**: Words in similar contexts have similar meanings (e.g., "cat" and "dog" appear near "pet").
-  - **Sentence & Document-Level Representations**: Encoding larger text units (e.g., TF-IDF, BERT).
-  - **Pragmatics & Contextual Meaning**: Meaning influenced by context and intent (e.g., "Can you pass the salt?" as a request).
-
-### Examples
-- **One-hot Encoding**: "Cat" = [1, 0, 0], "Dog" = [0, 1, 0] (binary vectors).
-- **Word Embeddings**: "King" = [0.7, 0.2, 0.5], "Queen" = [0.8, 0.3, 0.6] (similar vectors for similar meanings).
-
-### Diagram
-- **Description**: Draw a side-by-side comparison:
-  - Left: One-hot encoding with "cat" and "dog" as sparse vectors.
-  - Right: 2D plot of word embeddings with "king," "queen," "man," "woman" clustered based on similarity.
-
-### Case Study Question
-- **Question**: How does representing "bank" as an embedding versus one-hot encoding improve its use in a sentence like "He went to the bank to fish"?
-- **Answer Hint**: Embeddings capture context (riverbank vs. financial institution), unlike one-hot’s isolation.
-
-### Conclusion
-Representing meaning bridges human language and machine understanding, enabling tasks like translation and question-answering.
+RNNs are neural networks built to handle sequential data, like text or time series, by keeping a "memory" of past inputs to make predictions.
 
 ---
 
-## Chapter 2: Lexical Semantics
+### Subchapter 1.1: Definition and Purpose
+- **Key Terms:**
+  - **Sequential Data:** Data where order matters (e.g., words in a sentence).
+  - **Memory:** RNNs store information from previous steps to understand context.
+- **Example:** Predicting the next word in "The cat sat on the [?]" → likely "mat" because of the context from earlier words.
+- **Diagram Description:** Imagine a single neuron with a loop—its output feeds back into itself for the next step, showing how it remembers past inputs.
+- **Case Study Question:** How can an RNN predict stock prices using historical data?
+- **Conclusion:** RNNs are great for sequences because they pass information forward, but they struggle with long-term memory due to something called the vanishing gradient problem (where learning fades over long sequences).
+
+---
+
+### Subchapter 1.2: RNN Architecture
+- **Key Terms:**
+  - **Hidden State:** The "memory" updated at each step, holding past info.
+  - **Unfolding:** Picturing the RNN as a chain of layers, one for each time step.
+- **Example:** For "I love NLP," the RNN:
+  1. Takes "I" → updates hidden state.
+  2. Takes "love" + memory of "I" → updates again.
+  3. Takes "NLP" + memory of "I love" → predicts next word.
+- **Diagram Description:** Picture a timeline: inputs $x_1$ (I), $x_2$ (love), $x_3$ (NLP) flow into hidden states $h_1$, $h_2$, $h_3$, producing outputs $y_1$, $y_2$, $y_3$. Arrows show the hidden state passing along.
+- **Case Study Question:** How does backpropagation through time (BPTT) adjust weights in an RNN?
+- **Conclusion:** RNNs reuse weights across steps, making them efficient, but training is tricky because errors must travel back through time.
+
+---
+
+## Chapter 2: Long Short-Term Memory (LSTM)
 
 ### Overview
-Lexical semantics studies word meanings and their relationships, foundational for understanding ambiguity.
-
-### Subchapter 2.1: Key Concepts
-- **Definition**: Analyzing how words represent concepts and relate to each other.
-- **Key Terms**:
-  - **Synonymy**: Similar meanings (e.g., "happy" = "joyful").
-  - **Antonymy**: Opposite meanings (e.g., "hot" ≠ "cold").
-  - **Hyponymy**: Specific-to-general hierarchy (e.g., "dog" → "animal").
-  - **Hypernymy**: General-to-specific hierarchy (e.g., "animal" → "dog").
-  - **Homonymy**: Same form, different meanings (e.g., "bank" = financial vs. riverbank).
-  - **Polysemy**: Multiple related meanings (e.g., "book" = object vs. to reserve).
-  - **Meronymy**: Part of a whole (e.g., "wheel" → "car").
-  - **Holonymy**: Whole containing parts (e.g., "car" → "wheel").
-  - **Collocations**: Words commonly paired (e.g., "strong tea," not "powerful tea").
-
-### Examples
-- **Homonymy**: "Bat" in "A bat flew" (animal) vs. "He swung the bat" (sports equipment).
-- **Hyponymy**: "Labrador" → "dog" → "animal".
-
-### Diagram
-- **Description**: Draw a tree:
-  - Top: "Animal" (hypernym).
-  - Middle: "Dog" (hyponym of animal, hypernym of Labrador).
-  - Bottom: "Labrador" (hyponym).
-
-### Case Study Question
-- **Question**: How does lexical semantics distinguish "head" in "head of the company" vs. "head of the table"?
-- **Answer Hint**: Polysemy links related meanings (leader vs. top part), aiding disambiguation.
-
-### Conclusion
-Lexical semantics provides the framework to decode word meanings, critical for NLP applications like disambiguation.
+LSTMs are a smarter version of RNNs that fix the vanishing gradient problem, helping them remember things over long sequences.
 
 ---
 
-## Chapter 3: Word Senses
+### Subchapter 2.1: Definition and Components
+- **Key Terms:**
+  - **Cell State:** The long-term memory that carries info across time.
+  - **Gates:** Three controls—Forget, Input, Output—that decide what to keep or discard.
+- **Example:** Predicting the next word in a long story where early context (e.g., a character’s name) matters later.
+- **Diagram Description:** An LSTM cell with three gates: Forget (decides what to drop), Input (adds new info), Output (decides what to pass on), all managing the cell state like a conveyor belt.
+- **Case Study Question:** How does the forget gate help an LSTM model language better?
+- **Conclusion:** LSTMs shine in tasks needing long memory, like translating or summarizing, by carefully controlling info flow.
+
+---
+
+## Chapter 3: Attention Mechanism
 
 ### Overview
-Word senses refer to the distinct meanings a word can have, depending on context.
-
-### Subchapter 3.1: Key Concepts
-- **Definition**: Specific meanings of a word in different contexts.
-- **Key Terms**:
-  - **Monosemous Words**: Single meaning (e.g., "oxygen").
-  - **Polysemous Words**: Multiple related meanings (e.g., "book" = object vs. reserve).
-  - **Homonymous Words**: Same form, unrelated meanings (e.g., "bat" = animal vs. equipment).
-
-### Examples
-- **Polysemy**: "Book" in "I read a book" vs. "I’ll book a ticket."
-- **Homonymy**: "Bank" in "money bank" vs. "river bank."
-
-### Diagram
-- **Description**: Draw a branching tree for "bank":
-  - Root: "Bank".
-  - Left branch: "Financial institution".
-  - Right branch: "Riverbank".
-
-### Case Study Question
-- **Question**: Why is identifying word senses important in "He saw a bat in the cave"?
-- **Answer Hint**: Determines if "bat" is an animal or equipment based on "cave."
-
-### Conclusion
-Word senses highlight the complexity of meaning, necessitating context-aware NLP systems.
+Attention lets models focus on the most relevant parts of the input, boosting accuracy in tasks like translation.
 
 ---
 
-## Chapter 4: Relation between Senses
+### Subchapter 3.1: Definition and Function
+- **Key Terms:**
+  - **Alignment:** Matching input and output parts (e.g., "cat" to "chat").
+  - **Context Vector:** A weighted mix of input info used for predictions.
+- **Example:** Translating "The cat sat on the mat" to French: when making "chat," the model focuses most on "cat."
+- **Diagram Description:** A table with input words (The, cat, sat, on, the, mat) and attention scores (e.g., 0.05, 0.80, 0.05, 0.03, 0.04, 0.03) showing "cat" gets the most focus for "chat."
+- **Case Study Question:** Why is attention key for translating long sentences?
+- **Conclusion:** Attention makes models smarter by zooming in on what matters, avoiding the clutter of irrelevant info.
+
+---
+
+## Chapter 4: Transformer-Based Models
 
 ### Overview
-This explores how different senses of words are interconnected.
-
-### Subchapter 4.1: Key Concepts
-- **Definition**: Connections between word meanings via linguistic relationships.
-- **Key Terms**: Synonymy, antonymy, homonymy, polysemy, hyponymy, hypernymy, meronymy, holonymy (see Chapter 2).
-
-### Examples
-- **Polysemy**: "Head" (body part) relates to "head" (leader).
-- **Hyponymy**: "Dog" connects to "animal."
-
-### Diagram
-- **Description**: Draw a web:
-  - Center: "Head".
-  - Lines to: "body part," "leader," "top of table" (polysemy examples).
-
-### Case Study Question
-- **Question**: How do sense relations help interpret "The head read a book"?
-- **Answer Hint**: Polysemy links "head" (leader) to "read," not body part.
-
-### Conclusion
-Sense relations enhance meaning comprehension, aiding tasks like disambiguation.
+Transformers use self-attention to process entire sequences at once (not step-by-step like RNNs), making them fast and powerful.
 
 ---
 
-## Chapter 5: Word Sense Disambiguation (WSD)
+### Subchapter 4.1: Architecture and Advantages
+- **Key Terms:**
+  - **Encoder-Decoder:** Encoders process input; decoders generate output.
+  - **Self-Attention:** Looks at relationships within the sequence all at once.
+- **Example:** BERT understands context; GPT generates text—both are transformers.
+- **Diagram Description:** A stack of boxes: left side (encoders) takes "The cat sat," right side (decoders) outputs "Le chat était." Each box has self-attention and feed-forward layers.
+- **Case Study Question:** Why do transformers handle long-range dependencies better than RNNs?
+- **Conclusion:** Transformers’ parallel processing and attention make them top-tier for NLP tasks.
+
+---
+
+## Chapter 5: Self-Attention
 
 ### Overview
-WSD determines the correct meaning of a word in context.
-
-### Subchapter 5.1: Key Concepts
-- **Definition**: Identifying a word’s intended sense based on surrounding text.
-- **Key Terms**:
-  - **Dictionary-Based**: Uses resources like WordNet.
-  - **Supervised Learning**: Trains on labeled data.
-  - **Unsupervised Learning**: Clusters similar contexts.
-  - **Knowledge-Based**: Leverages ontologies.
-
-### Examples
-- "Bank" in "He went to the bank to withdraw money" = financial institution.
-- "Bank" in "The boat neared the bank" = riverbank.
-
-### Diagram
-- **Description**: Flowchart:
-  - Start: Ambiguous word "bank".
-  - Step 1: Analyze context.
-  - Step 2: Match with dictionary or model.
-  - End: Correct sense (financial or river).
-
-### Case Study Question
-- **Question**: How does WSD resolve "bat" in "He caught a bat in the attic"?
-- **Answer Hint**: Context "attic" suggests animal, not equipment.
-
-### Conclusion
-WSD resolves ambiguity, improving accuracy in translation and search engines.
+Self-attention figures out how important each word is to every other word in a sequence, capturing context deeply.
 
 ---
 
-## Chapter 6: Word Embeddings
+### Subchapter 5.1: Mechanism and Calculation
+- **Key Terms:**
+  - **Query, Key, Value:** Vectors that calculate attention—Q asks, K answers, V provides info.
+  - **Softmax:** Turns scores into probabilities (e.g., 0.8 for "cat," 0.2 for others).
+- **Example:** In "The cat sat on the mat," self-attention ties "sat" to "cat" (who’s sitting) and "mat" (where).
+- **Diagram Description:** A matrix: rows (Query for "sat"), columns (Keys for all words), dots show scores, then Softmax makes weights, and Values combine into an output.
+- **Case Study Question:** How is self-attention different from the attention in RNNs?
+- **Conclusion:** Self-attention lets transformers see the whole picture at once, improving context over step-by-step methods.
+
+---
+
+## Chapter 6: Multi-Headed Attention
 
 ### Overview
-Word embeddings are vector representations capturing word meanings and relationships.
-
-### Subchapter 6.1: Key Concepts
-- **Definition**: Dense vectors where similar words are close in space.
-- **Key Terms**:
-  - **Word2Vec**: Neural network-based embeddings.
-  - **GloVe**: Co-occurrence-based embeddings.
-  - **FastText**: Subword-aware embeddings.
-  - **BERT**: Contextual embeddings.
-
-### Examples
-- "King" = [0.7, 0.2, 0.5], "Queen" = [0.8, 0.3, 0.6] (similar vectors).
-
-### Diagram
-- **Description**: 2D plot:
-  - Plot "king," "queen," "man," "woman" with arrows showing "king - man + woman ≈ queen."
-
-### Case Study Question
-- **Question**: How do embeddings improve "I like to bank fish" interpretation?
-- **Answer Hint**: Vectors cluster "bank" with fishing terms, not finance.
-
-### Conclusion
-Embeddings enhance semantic understanding, powering advanced NLP tasks.
+Multi-headed attention runs several self-attentions at once to catch different angles (e.g., grammar, meaning).
 
 ---
 
-## Chapter 7: Word2Vec
+### Subchapter 6.1: Purpose and Functionality
+- **Key Terms:**
+  - **Heads:** Parallel attention layers, each focusing on something unique.
+  - **Concatenation:** Combining all head outputs into one rich result.
+- **Example:** One head links "cat" to "sat" (syntax), another to "mat" (meaning) in "The cat sat on the mat."
+- **Diagram Description:** Three mini self-attention boxes (heads) process "The cat sat," their outputs join into one big vector, then get polished by a final layer.
+- **Case Study Question:** Why does multi-headed attention help in translation?
+- **Conclusion:** Multi-headed attention gives a fuller picture by looking at data from multiple perspectives.
+
+---
+
+## Chapter 7: BERT (Bidirectional Encoder Representations from Transformers)
 
 ### Overview
-Word2Vec generates embeddings using neural networks.
-
-### Subchapter 7.1: Key Concepts
-- **Definition**: Maps words to vectors preserving relationships.
-- **Key Terms**:
-  - **CBOW**: Predicts target from context.
-  - **Skip-gram**: Predicts context from target.
-
-### Examples
-- "King - man + woman ≈ queen" (analogy learned).
-
-### Diagram
-- **Description**: Two diagrams:
-  - CBOW: "The," "cat," "on," "the" → "sits".
-  - Skip-gram: "sits" → "The," "cat," "on," "the".
-
-### Case Study Question
-- **Question**: How does Word2Vec interpret "Paris - France + Italy"?
-- **Answer Hint**: Predicts "Rome" via vector arithmetic.
-
-### Conclusion
-Word2Vec’s efficiency and analogy capture make it a cornerstone of NLP.
+BERT is a pre-trained transformer that reads text both ways (left-to-right and right-to-left) for deep context.
 
 ---
 
-## Chapter 8: CBOW (Continuous Bag of Words)
+### Subchapter 7.1: Pre-training and Fine-tuning
+- **Key Terms:**
+  - **Masked Language Modeling (MLM):** Predicts hidden words (e.g., "The [MASK] sat" → "cat").
+  - **Next Sentence Prediction (NSP):** Checks if two sentences connect (e.g., A: "The cat sat." B: "It was tired.").
+- **Example:** Fine-tuning BERT to label movie reviews as "positive" or "negative."
+- **Diagram Description:** A flow: input words → embeddings → stacked encoder layers → output for masked words or sentence relation.
+- **Case Study Question:** How does BERT’s two-way reading beat one-way models?
+- **Conclusion:** BERT’s bidirectional magic makes it super versatile for understanding text.
+
+---
+
+## Chapter 8: RoBERTa (Robustly Optimized BERT Pretraining Approach)
 
 ### Overview
-CBOW predicts a target word from its context.
-
-### Subchapter 8.1: Key Concepts
-- **Definition**: Uses surrounding words to predict the middle word.
-- **Key Terms**: Context window, neural network.
-
-### Examples
-- "The cat sits on the" → "mat."
-
-### Diagram
-- **Description**: Neural network:
-  - Input: "The," "cat," "on," "the".
-  - Output: "sits".
-
-### Case Study Question
-- **Question**: Why is CBOW faster than Skip-gram for "The dog barked loudly"?
-- **Answer Hint**: Predicts one word ("barked") from multiple context words.
-
-### Conclusion
-CBOW excels with frequent words, offering speed in embedding generation.
+RoBERTa is BERT’s upgraded cousin, trained smarter with more data for better results.
 
 ---
 
-## Chapter 9: Skip-gram and GloVe
+### Subchapter 8.1: Improvements and Performance
+- **Key Terms:**
+  - **Dynamic Masking:** Masks change each training round (not fixed like BERT).
+  - **Larger Batches:** Trains with more examples at once for stability.
+- **Example:** RoBERTa beats BERT on tasks like GLUE (language understanding benchmarks).
+- **Diagram Description:** A table comparing BERT (16GB data, NSP) vs. RoBERTa (160GB, no NSP, dynamic masks).
+- **Case Study Question:** Why does skipping NSP boost RoBERTa’s performance?
+- **Conclusion:** RoBERTa’s tweaks—more data, better masking—make it a top performer.
+
+---
+
+## Chapter 9: Fine-Tuning for Downstream Tasks
 
 ### Overview
-Skip-gram and GloVe are alternative embedding methods.
-
-### Subchapter 9.1: Skip-gram
-- **Definition**: Predicts context from a target word.
-- **Key Terms**: Rare words, computational cost.
-- **Example**: "mat" → "The," "cat," "sits," "on."
-
-### Subchapter 9.2: GloVe
-- **Definition**: Uses co-occurrence statistics.
-- **Key Terms**: Global context, matrix factorization.
-- **Example**: Builds vectors from word co-occurrence matrix.
-
-### Diagram
-- **Description**: Split diagram:
-  - Left: Skip-gram ("mat" → context words).
-  - Right: GloVe (matrix with rows/columns as words, cells as co-occurrences).
-
-### Case Study Question
-- **Question**: How does GloVe differ from Skip-gram in "The cat sleeps"?
-- **Answer Hint**: GloVe uses global stats, Skip-gram local context.
-
-### Conclusion
-Skip-gram suits rare words, GloVe leverages global patterns, enhancing embeddings.
+Fine-tuning tweaks a pre-trained model (like BERT) for specific jobs using labeled data.
 
 ---
 
-## Chapter 10: Discourse Segmentation
+### Subchapter 9.1: Process and Applications
+- **Key Terms:**
+  - **Transfer Learning:** Using pre-trained knowledge for new tasks.
+  - **Task-Specific Layers:** Extra bits added for things like classification.
+- **Example:** Tuning BERT to spot names (NER) in text like "Steve Jobs."
+- **Diagram Description:** A flowchart: pre-trained BERT → add a classifier → train on labeled data → ready for NER.
+- **Case Study Question:** How does fine-tuning cut the need for huge datasets?
+- **Conclusion:** Fine-tuning makes big models flexible and efficient for specific uses.
+
+---
+
+## Chapter 10: Text Classification
 
 ### Overview
-Divides text into meaningful segments.
-
-### Subchapter 10.1: Key Concepts
-- **Definition**: Breaking text into coherent units.
-- **Key Terms**:
-  - **Sentence-Level**: Splits into sentences.
-  - **Topic Segmentation**: Identifies topic shifts.
-  - **Dialogue Segmentation**: Separates speaker turns.
-  - **Methods**: Rule-based, ML, neural networks.
-
-### Examples
-- "Climate change is serious. AI is advancing." → Two segments.
-
-### Diagram
-- **Description**: Text block with lines dividing topics:
-  - Segment 1: Climate sentences.
-  - Segment 2: AI sentence.
-
-### Case Study Question
-- **Question**: Segment "I ate lunch. Then I coded. AI is cool."
-- **Answer Hint**: Three segments: eating, coding, AI opinion.
-
-### Conclusion
-Segmentation clarifies text structure, aiding summarization and dialogue systems.
+Text classification tags text with labels (e.g., positive, spam) based on its content.
 
 ---
 
-## Chapter 11: Text Coherence
+### Subchapter 10.1: Techniques and Use Cases
+- **Key Terms:**
+  - **Sentiment Analysis:** Labels like "positive" or "negative."
+  - **Topic Detection:** Finds themes (e.g., sports, tech).
+- **Example:** Labeling tweets as "spam" or "not spam."
+- **Diagram Description:** A pipeline: text ("I love this!") → tokens → model (e.g., RoBERTa) → output ("positive").
+- **Case Study Question:** How does BERT improve classification over older methods?
+- **Conclusion:** Modern models like transformers make classification sharper and more reliable.
+
+---
+
+## Chapter 11: Text Generation
 
 ### Overview
-Ensures logical flow in text.
-
-### Subchapter 11.1: Key Concepts
-- **Definition**: Smooth, logical idea connection.
-- **Key Terms**:
-  - **Local Coherence**: Between consecutive sentences.
-  - **Global Coherence**: Overall theme consistency.
-  - **Cohesive Devices**: "However," "therefore."
-  - **Logical Order**: Chronological, cause-effect.
-  - **Lexical Cohesion**: Repeated words/synonyms.
-
-### Examples
-- "John loves football. He plays daily." (Local coherence).
-
-### Diagram
-- **Description**: Flowchart:
-  - Sentence 1 → "therefore" → Sentence 2.
-
-### Case Study Question
-- **Question**: Why is "I ate. The sky is blue" incoherent?
-- **Answer Hint**: No logical connection between ideas.
-
-### Conclusion
-Coherence makes text readable and meaningful, vital for NLP.
+Text generation creates new text from prompts, like stories or translations.
 
 ---
 
-## Chapter 12: Discourse Structure
-
-### Overview
-Organizes text for effective communication.
-
-### Subchapter 12.1: Key Concepts
-- **Definition**: Text organization framework.
-- **Key Terms**:
-  - **RST (Rhetorical Structure Theory)**: Hierarchical relations.
-  - **Segmentation-Based**: Topic-based divisions.
-  - **Dependency Graph**: Sentence connections.
-
-### Examples
-- Coherent: "It rained, so I stayed in."
-
-### Diagram
-- **Description**: Tree:
-  - Root: Main idea.
-  - Branches: Cause ("rain"), effect ("stayed in").
-
-### Case Study Question
-- **Question**: Structure "I failed. I studied less."
-- **Answer Hint**: Cause-effect relation.
-
-### Conclusion
-Discourse structure ensures logical text flow, enhancing comprehension.
+### Subchapter 11.1: Models and Applications
+- **Key Terms:**
+  - **Autoregressive:** Predicts one word at a time, building on itself.
+  - **Conditioning:** Uses input to steer the output.
+- **Example:** GPT-3 writing: "Once upon a time" → "there lived a brave knight."
+- **Diagram Description:** A step-by-step line: "The future" → predict "of" → "The future of" → predict "AI" → keeps going.
+- **Case Study Question:** What challenges come with controlling generated text?
+- **Conclusion:** Generation models are creative powerhouses but need guidance to stay on track.
 
 ---
 
-## Chapter 13: Reference Resolution
+# Final Tips for Your Exam
+- **Focus Areas:** Understand how RNNs lead to LSTMs, then to transformers. Know attention’s role and how BERT/RoBERTa work.
+- **Practice:** Review examples and case questions—they might spark similar exam problems.
+- **Diagrams:** Visualize the flows (e.g., RNN loops, transformer stacks) in your head.
 
-### Overview
-Identifies what expressions refer to.
-
-### Subchapter 13.1: Key Concepts
-- **Definition**: Linking words/phrases to entities.
-- **Key Terms**:
-  - **Coreference Resolution**: Same entity mentions.
-  - **Pronominal Anaphora**: Pronoun-to-noun links.
-  - **Named Entity Resolution**: Same entity names.
-  - **Bridging Resolution**: Implicit links.
-
-### Examples
-- "John left. He was tired." ("He" = John).
-
-### Diagram
-- **Description**: Text with arrows:
-  - "John" → "He."
-
-### Case Study Question
-- **Question**: Resolve "She smiled" in "Alice met Mary. She smiled."
-- **Answer Hint**: Context needed; could be Alice or Mary.
-
-### Conclusion
-Reference resolution clarifies entity references, improving text understanding.
-
----
-
-## Chapter 14: Pronominal Anaphora Resolution
-
-### Overview
-Resolves pronouns to their nouns.
-
-### Subchapter 14.1: Key Concepts
-- **Definition**: Linking pronouns to antecedents.
-- **Key Terms**:
-  - **Pronoun-Antecedent**: "John" → "he."
-  - **Cataphora**: Pronoun before noun ("He arrived, John said").
-  - **Zero Anaphora**: Implicit subjects (e.g., Japanese).
-
-### Examples
-- "Maria spoke. She was loud." ("She" = Maria).
-
-### Diagram
-- **Description**: Sentence with arrow from "she" to "Maria."
-
-### Case Study Question
-- **Question**: Resolve "he" in "When he came, John laughed."
-- **Answer Hint**: Cataphora; "he" = John.
-
-### Conclusion
-Pronominal resolution maintains coherence by tracking pronouns.
-
----
-
-## Chapter 15: Coreference Resolution
-
-### Overview
-Links all mentions of an entity.
-
-### Subchapter 15.1: Key Concepts
-- **Definition**: Identifying same-entity expressions.
-- **Key Terms**:
-  - **Pronominal**: "John" → "he."
-  - **Nominal**: "Elon Musk" → "the billionaire."
-  - **Demonstrative**: "Product" → "this."
-  - **Cataphoric**: "He" before "John."
-
-### Examples
-- "Elon Musk founded Tesla. The billionaire innovates." ("billionaire" = Elon).
-
-### Diagram
-- **Description**: Text with lines connecting "Elon Musk" and "billionaire."
-
-### Case Study Question
-- **Question**: Resolve "this" in "Tesla launched a car. This impressed fans."
-- **Answer Hint**: "This" = car.
-
-### Conclusion
-Coreference resolution tracks entities, enhancing text clarity.
-
----
-
-## Final Tips for Your Exam
-- **Review Key Terms**: Memorize definitions and relationships.
-- **Practice Examples**: Apply concepts to new sentences.
-- **Sketch Diagrams**: Visualize embeddings, sense trees, discourse structures.
-- **Tackle Case Studies**: Use context to solve ambiguities.
-
-Good luck tomorrow! You’ve got this!
+This note packs everything you need—study hard, and you’ve got this!
