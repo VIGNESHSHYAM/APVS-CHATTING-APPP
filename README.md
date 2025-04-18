@@ -1,6 +1,6 @@
 # REAL-TIME AUTOMATED TRAFFIC VIOLATION DETECTION USING COMPUTER VISION AND IoT FOR SMART CITIES
 
-Mithun S†, Vignesh A†, and G. Padmapriya‡  
+Mithun S, Vignesh A, and G. Padmapriya  
 †Department of Computing Technologies, SRM Institute of Science and Technology, Kattankulathur, Tamil Nadu, India  
 ‡Email: gpadmapriya@srmist.edu.in
 
